@@ -1,0 +1,13 @@
+{
+  "name": "alifaisal22.github.io",
+  "version": "1.0.0",
+  "description": "This repository now includes an implementation starter kit for combining the two referenced platforms (Career Pilot + IntervueX) into one production-ready architecture.",
+  "private": true,
+  "scripts": {
+    "validate:assets": "node ./scripts/validate-assets.mjs",
+    "test": "npm run validate:assets"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
