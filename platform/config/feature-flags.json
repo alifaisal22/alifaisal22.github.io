@@ -1,0 +1,18 @@
+{
+  "features": {
+    "unifiedAuth": true,
+    "resumeTailorV2": true,
+    "jobTrackerUnified": true,
+    "mockInterviewUnified": true,
+    "codingSandboxUnified": false,
+    "proctoringLiveSignals": false,
+    "proctoringScorePenalty": false,
+    "legacyCareerPilotFallback": true,
+    "legacyIntervueXFallback": true
+  },
+  "rollout": {
+    "internalUsersPercent": 100,
+    "betaUsersPercent": 20,
+    "generalUsersPercent": 0
+  }
+}

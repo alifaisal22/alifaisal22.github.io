@@ -1,0 +1,61 @@
+{
+  "qualityGates": [
+    {
+      "name": "unit-tests-services",
+      "required": true,
+      "target": ">= 85% pass for unified service layer",
+      "status": "pending"
+    },
+    {
+      "name": "integration-tests-api",
+      "required": true,
+      "target": "100% pass for auth, resume, jobs, interview, proctoring APIs",
+      "status": "pending"
+    },
+    {
+      "name": "e2e-interview-flow",
+      "required": true,
+      "target": "start -> sandbox -> proctoring -> evaluate -> report",
+      "status": "pending"
+    },
+    {
+      "name": "security-review",
+      "required": true,
+      "target": "no critical/high issues for auth, file uploads, session APIs",
+      "status": "pending"
+    },
+    {
+      "name": "performance-check",
+      "required": true,
+      "target": "p95 API latency < 500ms under baseline load",
+      "status": "pending"
+    }
+  ],
+  "releasePhases": [
+    {
+      "phase": "internal",
+      "enabledFlags": [
+        "unifiedAuth",
+        "resumeTailorV2",
+        "jobTrackerUnified",
+        "mockInterviewUnified"
+      ],
+      "entryCriteria": "all quality gates green in staging"
+    },
+    {
+      "phase": "beta",
+      "enabledFlags": [
+        "codingSandboxUnified",
+        "proctoringLiveSignals"
+      ],
+      "entryCriteria": "no sev-1 incidents for 7 days in internal phase"
+    },
+    {
+      "phase": "general-availability",
+      "enabledFlags": [
+        "proctoringScorePenalty"
+      ],
+      "entryCriteria": "no sev-1/sev-2 incidents for 14 days in beta phase"
+    }
+  ]
+}

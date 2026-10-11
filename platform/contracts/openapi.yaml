@@ -1,0 +1,207 @@
+openapi: 3.0.3
+info:
+  title: Unified AI Career Platform API
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+paths:
+  /api/auth/login:
+    post:
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+
+  /api/resume/tailor:
+    post:
+      summary: Tailor resume to job description
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResumeTailorRequest'
+      responses:
+        '200':
+          description: Tailored resume result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResumeTailorResponse'
+
+  /api/jobs/track:
+    post:
+      summary: Create or update application tracking entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobTrackerEntry'
+      responses:
+        '200':
+          description: Job tracking entry stored
+
+  /api/interview/session/start:
+    post:
+      summary: Start interview session
+      responses:
+        '200':
+          description: Interview started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterviewSession'
+
+  /api/interview/session/{sessionId}/sandbox:
+    post:
+      summary: Record coding sandbox event
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SandboxEvent'
+      responses:
+        '200':
+          description: Event recorded
+
+  /api/interview/session/{sessionId}/proctoring:
+    post:
+      summary: Record proctoring signal or flag
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProctoringEvent'
+      responses:
+        '200':
+          description: Proctoring event stored
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    AuthResponse:
+      type: object
+      required: [token, user]
+      properties:
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+    User:
+      type: object
+      required: [id, email, role, credits]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [candidate, admin]
+        credits:
+          type: integer
+    ResumeTailorRequest:
+      type: object
+      required: [resumeText, jobDescription]
+      properties:
+        resumeText:
+          type: string
+        jobDescription:
+          type: string
+    ResumeTailorResponse:
+      type: object
+      required: [tailoredResume, atsScore]
+      properties:
+        tailoredResume:
+          type: string
+        atsScore:
+          type: number
+    JobTrackerEntry:
+      type: object
+      required: [company, role, status]
+      properties:
+        company:
+          type: string
+        role:
+          type: string
+        status:
+          type: string
+          enum: [saved, applied, interviewing, offered, rejected]
+        notes:
+          type: string
+    InterviewSession:
+      type: object
+      required: [id, userId, mode, status]
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        mode:
+          type: string
+          enum: [technical, hr, non_technical, sprint]
+        status:
+          type: string
+          enum: [started, completed, cancelled]
+    SandboxEvent:
+      type: object
+      required: [eventType, timestamp]
+      properties:
+        eventType:
+          type: string
+          enum: [code_change, test_run, language_switch]
+        timestamp:
+          type: string
+          format: date-time
+        payload:
+          type: object
+          additionalProperties: true
+    ProctoringEvent:
+      type: object
+      required: [signalType, score, timestamp]
+      properties:
+        signalType:
+          type: string
+          enum: [face_missing, gaze_offscreen, tab_switch, camera_blocked, speech_mismatch]
+        score:
+          type: number
+        timestamp:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          additionalProperties: true
